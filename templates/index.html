@@ -1,10 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 <body>
-$END$
+<div class="container">
+    <h1>Buzz App</h1>
+    <div id="container">
+<!-- Chats-->
+    </div>
+    <input class="form-control" id="input"/>
+</div>
+
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
+        integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
+        crossorigin="anonymous"></script>
+
+<script>
+    const socket = io();
+    let name;
+    $(()=>{
+        name = window.prompt("What's your name?")
+        $('#input').on('keyup', (event)=>{
+            if(event.which === 13){
+                send_message();
+            }
+        })
+    })
+
+    const send_message = () => {
+        const data = {
+            name,
+            message: $('#input').val()
+        }
+        socket.emit('send_message', data);
+        $('#input').val('')
+    }
+
+    socket.on('receive_message', (data) => {
+        $('#container').append(`<p>${data.name}: ${data.message}</p>`)
+    })
+
+</script>
 </html>

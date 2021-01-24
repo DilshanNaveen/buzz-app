@@ -1,16 +1,21 @@
-# This is a sample Python script.
+from flask import Flask, render_template
+from flask_socketio import SocketIO
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+app = Flask(__name__)
+socket = SocketIO(app)
+socket.init_app(app, cors_allwed_origins="*")
 
 
-# Press the green button in the gutter to run the script.
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@socket.event
+def send_message(data):
+    socket.emit('receive_message', data)
+
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    socket.run(app)
